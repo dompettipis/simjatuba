@@ -1,8 +1,3 @@
-
-
-
-
-
         <div class="row">
 
           <?php foreach ($tukang as $m) :?>
@@ -23,8 +18,6 @@
             </div>
           </div>
         <?php endforeach; ?>
-
-
 
         </div>
         <!-- /.row -->

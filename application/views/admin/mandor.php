@@ -18,9 +18,7 @@
                 <thead>
                   <tr>
                     <th scope="col">No</th>
-                    <th scope="col">Nama Pelanggan</th>
-                    <th scope="col">Email</th>
-                    <th scope="col">jk</th>
+                    <th scope="col">Nama Mandor</th>
                     <th scope="col">Alamat</th>
                     <th scope="col">No HP</th>
                     <th scope="col">Action</th>
@@ -29,17 +27,16 @@
                 <tbody>
 
                 <?php $i = 1; ?>
-                <?php foreach ($pelanggan as $sm) :?>
+                <?php foreach ($mandor as $sm) :?>
                   <tr>
                     <th scope="row"><?= $i; ?></th>
-                    <td><a href="#"><?= $sm['name']; ?></a> </td>
-                    <td><?= $sm['email']; ?></td>
-                    <td><?= $sm['jk']; ?></td>
+                    <td><a href="#"><?= $sm['nama_mandor']; ?></a> </td>
                     <td><?= $sm['alamat']; ?></td>
                     <td><?= $sm['no_hp']; ?></td>
                     <td class="text-center">
-                      <a href="#" class="btn btn-success"><i class="fas fa-user-edit"></i></a>
-                      <a href="" class="btn btn-danger" onclick="return confirm('Apakah yakin akan dihapus?');"><i class="fas fa-user-times"></i></a>
+                      <a href="<?= base_url('admin/mandor_detail/') . $sm['id_mandor'] ?>" class="btn btn-info"><i class="fas fa-eye"></i></a>
+                      <a href="<?= base_url('admin/mandor_edit/') . $sm['id_mandor'] ?>" class="btn btn-success"><i class="fas fa-user-edit"></i></a>
+                      <a href="<?= base_url('admin/mandor_hapus/') . $sm['id_mandor'] ?>" class="btn btn-danger" onclick="return confirm('Apakah yakin akan dihapus?');"><i class="fas fa-user-times"></i></a>
                     </td>
                   </tr>
                 <?php $i++; ?>
