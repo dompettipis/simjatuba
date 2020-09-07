@@ -130,9 +130,73 @@ class User extends CI_Controller
     }
   }
 
+// =====================================================
+  // pengelolaan User
+  public function read()
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Data user';
+    $data['semua_user'] = $this->db->get('user')->result_array();
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('user/read', $data);
+    $this->load->view('templates/footer');
+  }
 
+  public function user_detail($id)
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Detail User';
+
+    $data['user'] = $this->db->select('*')->from('user')->join('user_role', 'user_role.id=user.role_id')->where('user.id', $id)->get()->row_array();
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('user/user_detail', $data);
+    $this->load->view('templates/footer'); 
+  }
+
+  public function user_edit($id)
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Edit Data User';
+    $data['user'] = $this->db->get_where('user', ['id' => $id])->row_array();
+    $data['role'] = $this->db->get('user_role')->result_array();
+
+    $this->form_validation->set_rules('name', 'Nama', 'required|trim');
+    $this->form_validation->set_rules('email', 'Email', 'required|trim');
+    $this->form_validation->set_rules('jk', 'Jenis Kelamin', 'required|trim');
+    $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+    $this->form_validation->set_rules('no_hp', 'Nomor Hp', 'required|trim');
+    if($this->form_validation->run() == false ){
+      $this->load->view('templates/header', $data);
+      $this->load->view('templates/sidebar', $data);
+      $this->load->view('templates/topbar', $data);
+      $this->load->view('user/user_edit', $data);
+      $this->load->view('templates/footer'); 
+    } else {
+        $data = [
+          'name' => $this->input->post('name'),
+          'email' => $this->input->post('email'),
+          'jk' => $this->input->post('jk'),
+          'alamat' => $this->input->post('alamat'),
+          'no_hp' => $this->input->post('no_hp'),
+          'role_id' => $this->input->post('role_id')
+        ];
+        $this->db->update('user', $data, ['id' => $this->input->post('id')]);
+        redirect('user/read', 'refresh');
+    }
+  }
+
+  public function user_hapus($id)
+  {
+      $this->db->delete('user', ['id' => $id]);
+      redirect('user/read');
+  }
 
 
 }
 
- ?>
+

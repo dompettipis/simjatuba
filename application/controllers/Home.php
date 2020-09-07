@@ -10,7 +10,6 @@ class Home extends CI_Controller
     $data['title'] = 'Halaman Utama';
     $data['tukang'] = $this->db->get_where('user', ['role_id' => 3])->result_array();
 
-
     $this->load->view('templates/home_header', $data);
     $this->load->view('templates/home_topbar', $data);
     $this->load->view('templates/home_sidebar', $data);

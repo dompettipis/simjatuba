@@ -95,7 +95,7 @@ class Admin extends CI_Controller
     $data['title'] = 'Data Mandor';
     $data['jk'] = ['Laki-laki', 'Perempuan'];
 
-    $data['pelanggan'] = $this->db->get_where('user', ['role_id' => 3])->result_array();
+    $data['mandor'] = $this->db->get_where('mandor')->result_array();
 
     $this->load->view('templates/header', $data);
     $this->load->view('templates/sidebar', $data);
@@ -104,6 +104,54 @@ class Admin extends CI_Controller
     $this->load->view('templates/footer');
   }
 
+  public function mandor_detail($id)
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Detail Mandor';
+
+    $data['mandor'] = $this->db->get_where('mandor', ['id_mandor' => $id])->row_array();
+
+    $this->load->view('templates/header', $data);
+    $this->load->view('templates/sidebar', $data);
+    $this->load->view('templates/topbar', $data);
+    $this->load->view('mandor/detail', $data);
+    $this->load->view('templates/footer'); 
+  }
+
+  public function mandor_edit($id)
+  {
+    $data['user'] = $this->db->get_where('user', ['email' => $this->session->userdata('email')])->row_array();
+    $data['title'] = 'Edit Data Mandor';
+    $data['mandor'] = $this->db->get_where('mandor', ['id_mandor' => $id])->row_array();
+
+    $this->form_validation->set_rules('nama_mandor', 'Nama Mandor', 'required|trim');
+    $this->form_validation->set_rules('alamat', 'Alamat', 'required|trim');
+    $this->form_validation->set_rules('no_hp', 'Nomor Hp', 'required|trim');
+    $this->form_validation->set_rules('deskripsi', 'Deskripsi', 'required|trim');
+    if($this->form_validation->run() == false ){
+      $this->load->view('templates/header', $data);
+      $this->load->view('templates/sidebar', $data);
+      $this->load->view('templates/topbar', $data);
+      $this->load->view('mandor/edit', $data);
+      $this->load->view('templates/footer'); 
+    } else {
+        $data = [
+          'nama_mandor' => $this->input->post('nama_mandor'),
+          'alamat' => $this->input->post('alamat'),
+          'no_hp' => $this->input->post('no_hp'),
+          'deskripsi' => $this->input->post('deskripsi'),
+        ];
+        $this->db->update('mandor', $data, ['id_mandor' => $id]);
+        redirect('admin/mandor', 'refresh');
+    }
+  }
+
+  public function mandor_hapus($id)
+  {
+      $this->db->delete('mandor', ['id_mandor' => $id]);
+      redirect('admin/mandor');
+  }
+
 }
 
- ?>
+
